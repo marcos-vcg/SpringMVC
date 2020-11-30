@@ -1,5 +1,7 @@
 package controller;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +23,8 @@ public class TarefasController {
             return "tarefa/formulario";
         }
     	
-        JdbcTarefaDao dao = new JdbcTarefaDao();
-        dao.adiciona(tarefa);
+        //JdbcTarefaDao dao = new JdbcTarefaDao();
+        //dao.adiciona(tarefa);
         return "tarefa/adicionada";
     }
 }

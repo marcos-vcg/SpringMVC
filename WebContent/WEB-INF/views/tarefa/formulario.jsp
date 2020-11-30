@@ -12,7 +12,9 @@
     	<form action="adicionaTarefa" method="post">
         Descrição: <br />
         <textarea name="descricao" rows="5" cols="100"></textarea><br />
-
+		<br/>
+        <form:errors path="tarefa.descricao" cssStyle="color:red"/>
+        <br/>
         <input type="submit" value="Adicionar">
       </form>
 	</body>
