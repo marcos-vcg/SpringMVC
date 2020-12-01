@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
+
+
 public class Filme implements Serializable{
 
 
@@ -16,14 +18,14 @@ public class Filme implements Serializable{
 	
 	private Integer id;
 	
-	@NotEmpty(message="Favor Informar o Título")
-	@Size(max=30, message="Tamanho máximo de 30 caracteres")
+	//@NotEmpty(message="Favor Informar o Título")
+	//@Size(max=30, message="Tamanho máximo de 30 caracteres")
 	private String titulo;
 	
-	@NotNull(message="Favor selecionar um Gênero")
+	//@NotNull(message="Favor selecionar um Gênero")
 	private Genero genero;
 	
-	@Positive
+	//@Positive
 	private Integer copias;
 	
 	private String sinopse;

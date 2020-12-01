@@ -2,13 +2,16 @@ package controller;
 
 import java.util.List;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import bean.Filme;
 import dao.CategoriaDao;
@@ -16,6 +19,8 @@ import dao.DataSource;
 import dao.FilmeDao;
 import dao.GeneroDao;
 
+
+@MultipartConfig
 @Controller
 public class FilmesController {
 	
@@ -36,44 +41,49 @@ public class FilmesController {
 
     
     // Método instancia e seta o objeto a partir dos campos de mesmo nome dos atributos da Classe
-    @RequestMapping("adicionaFilme")
-    public String adiciona(@Valid Filme filme, BindingResult result) {
+    @RequestMapping("insertFilme")
+    public String adiciona(/*@Valid*/Filme filme /*, BindingResult result, RedirectAttributes atributes */) {
     	
     	/*
-    	// Verifica se tem algum erro com o campo descricao
-    	if(result.hasFieldErrors("descricao")) {
-    		return "filme/cadastro";
-    	}*/
-    	
     	// Verifica algum erro geral
     	if(result.hasErrors()) {
+    		atributes.addFlashAttribute("mensagem", "Verifique os Campos!");
             return "filme/cadastro";
-        }
-    	
+        }*/
 
         filmeDao.insert(filme);
-        return "filme/lista";
+        //atributes.addFlashAttribute("mensagem", "Filme Inserido!");
+        return "forward:filmes";
     }
     
     
     // Recebe o modelo, adiciona um atributo a ele e o retorno redireciona para o JSP
-    @RequestMapping("listaFilmes")
+    @RequestMapping("filmes")
 	public String lista(Model model) {
 	    model.addAttribute("filmes", filmeDao.selectAll());
 	    return "filme/lista";
     }
     
     
-    /*
-    // Instancia um Objeto ModelAndView passando o caminho do JSP, adiciona um objeto a ele e retorna esse ModelAndView
-    @RequestMapping("listaTarefas")
-    public ModelAndView lista() {
-        JdbcTarefaDao dao = new JdbcTarefaDao();
-        List<Tarefa> tarefas = dao.lista();
-
-        ModelAndView mv = new ModelAndView("tarefa/lista");
-        mv.addObject("tarefas", tarefas);
-        return mv;
-    } */
+    @RequestMapping("editFilme")
+    public String edit(Filme filme, Model model) {
+    	model.addAttribute("filme", filmeDao.select(filme.getId()));
+    	model.addAttribute("generos", generoDao.selectAll());
+    	model.addAttribute("categorias", categoriaDao.selectAll());
+        return "filme/cadastro";
+    }
     
+    
+    @RequestMapping("deleteFilme")
+    public String remove(Filme filme) {
+        filmeDao.delete(filme.getId());
+        return "forward:filmes";
+    }
+    
+    
+    @RequestMapping("updateFilme")
+    public String update(Filme filme) {
+      filmeDao.update(filme);
+      return "redirect:filmes";
+    }
 }
