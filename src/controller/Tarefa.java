@@ -4,11 +4,13 @@ import java.util.Calendar;
 
 import javax.validation.constraints.Size;
 
+		
+
 public class Tarefa {
 
 	private Long id;
 	
-	@Size(min=5)
+	@Size(min=5, message=" *Deve ter no mínimo 5 caracteres!")
 	private String descricao;
 	private boolean finalizado;
 	private Calendar dataFinalizacao;

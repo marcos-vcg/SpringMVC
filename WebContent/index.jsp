@@ -12,5 +12,7 @@
 		<a href="hello">Olá!</a>
 		<a href="student">Add Estudante</a>
 		<a href="novaTarefa">Adicionar Tarefa!</a>
+		<a href="listaFilmes">Lista de Filmes!</a>
+		
 	</body>
 </html>
