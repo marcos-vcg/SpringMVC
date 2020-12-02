@@ -9,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -20,7 +22,7 @@ import dao.FilmeDao;
 import dao.GeneroDao;
 
 
-@MultipartConfig
+//@MultipartConfig
 @Controller
 public class FilmesController {
 	
@@ -39,28 +41,28 @@ public class FilmesController {
         return "filme/cadastro";
     }
 
-    //sdfdfd
     
     
     // Método instancia e seta o objeto a partir dos campos de mesmo nome dos atributos da Classe
-    @RequestMapping("insertFilme")
-    public String adiciona(/*@Valid*/Filme filme /*, BindingResult result, RedirectAttributes atributes */) {
+    //@RequestMapping("insertFilme")
+    @RequestMapping(value = {"/insertFilme"}, method = RequestMethod.POST)
+    public String adiciona(@Valid Filme filme , BindingResult result, RedirectAttributes atributes) {
     	
-    	/*
+    	
     	// Verifica algum erro geral
     	if(result.hasErrors()) {
     		atributes.addFlashAttribute("mensagem", "Verifique os Campos!");
-            return "filme/cadastro";
-        }*/
+            return "forward:novoFilme";
+        }
 
         filmeDao.insert(filme);
         //atributes.addFlashAttribute("mensagem", "Filme Inserido!");
-        return "forward:filmes";
+        return "redirect:filmes";
     }
     
     
     // Recebe o modelo, adiciona um atributo a ele e o retorno redireciona para o JSP
-    @RequestMapping("filmes")
+    @RequestMapping(value = "filmes", method = RequestMethod.GET)
 	public String lista(Model model) {
 	    model.addAttribute("filmes", filmeDao.selectAll());
 	    return "filme/lista";
@@ -76,10 +78,10 @@ public class FilmesController {
     }
     
     
-    @RequestMapping("deleteFilme")
+    @RequestMapping(value="deleteFilme", method=RequestMethod.GET)
     public String remove(Filme filme) {
         filmeDao.delete(filme.getId());
-        return "forward:filmes";
+        return "redirect:filmes";
     }
     
     

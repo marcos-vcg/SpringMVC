@@ -7,25 +7,25 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 
 public class Filme implements Serializable{
-
-
 
 	private static final long serialVersionUID = 1L;
 	
 	
 	private Integer id;
 	
-	//@NotEmpty(message="Favor Informar o Título")
-	//@Size(max=30, message="Tamanho máximo de 30 caracteres")
+	@NotEmpty(message="Favor Informar o Título")
+	@Size(max=30, message="Tamanho máximo de 30 caracteres")
 	private String titulo;
 	
-	//@NotNull(message="Favor selecionar um Gênero")
+	@NotNull(message="Favor selecionar um Gênero")
 	private Genero genero;
 	
-	//@Positive
+	@Positive
 	private Integer copias;
 	
 	private String sinopse;
@@ -37,7 +37,6 @@ public class Filme implements Serializable{
 	private Categoria categoria;
 
 
-	
 	
 	public Integer getId() {
 		return id;
