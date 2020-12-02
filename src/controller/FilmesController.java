@@ -35,7 +35,20 @@ public class FilmesController {
 
 
     @RequestMapping("novoFilme")
-    public String form(Model model) {
+    public String form(/*Filme filme,*/ Model model) {
+    	
+    	/*
+    	if (filme == null) {
+    		filme = new Filme();
+    		model.addAttribute("filme", filme);
+    	}
+    	
+    	if(model.getAttribute("filme") == null) {
+    		model.addAttribute("filme", new Filme());
+    	};*/
+    	
+    	
+    	//model.addAttribute("filme", filme);
     	model.addAttribute("generos", generoDao.selectAll());
     	model.addAttribute("categorias", categoriaDao.selectAll());
         return "filme/cadastro";
@@ -46,12 +59,12 @@ public class FilmesController {
     // Método instancia e seta o objeto a partir dos campos de mesmo nome dos atributos da Classe
     //@RequestMapping("insertFilme")
     @RequestMapping(value = {"/insertFilme"}, method = RequestMethod.POST)
-    public String adiciona(@Valid Filme filme , BindingResult result, RedirectAttributes atributes) {
+    public String adiciona(@Valid Filme filme , BindingResult result/*, RedirectAttributes atributes*/) {
     	
     	
     	// Verifica algum erro geral
     	if(result.hasErrors()) {
-    		atributes.addFlashAttribute("mensagem", "Verifique os Campos!");
+    		//atributes.addFlashAttribute("mensagem", "Verifique os Campos!");
             return "forward:novoFilme";
         }
 

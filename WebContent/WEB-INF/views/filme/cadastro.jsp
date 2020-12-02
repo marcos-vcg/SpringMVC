@@ -32,19 +32,19 @@
 		
 		<div class="container col-md-8">
 			<div class="card card-body">	
-				<c:if test="${filme == null}"><h2>Novo Filme</h2></c:if>
-				<c:if test="${filme != null}"><h2>Editar Filme</h2></c:if>
+				<c:if test="${filme.id == null}"><h2>Novo Filme</h2></c:if>
+				<c:if test="${filme.id != null}"><h2>Editar Filme</h2></c:if>
 				
-				<form action=<c:if test="${filme == null}">"insertFilme"</c:if>
-									<c:if test="${filme != null}">"updateFilme"</c:if> 
+				<form action=<c:if test="${filme.id == null}">"insertFilme"</c:if>
+									<c:if test="${filme.id != null}">"updateFilme"</c:if> 
 									method="post" >
 					
-					<c:if test="${filme != null}"><input type="hidden" name="id" value='${filme.id}'/></c:if>
+					<c:if test="${filme.id != null}"><input type="hidden" name="id" value='${filme.id}'/></c:if>
 			
 					<div class="container text-right">
 						<img id="mostrarImagem" alt="Foto de Capa"  style="width: 100px; height: 130px"  /> 					
 						<br>
-						<input name="" id="imagem" type="file" accept="image/*"  onchange="document.getElementById('mostrarImagem').src = window.URL.createObjectURL(this.files[0])">
+						<input name="image" id="imagem" type="file" accept="image/*"  onchange="document.getElementById('mostrarImagem').src = window.URL.createObjectURL(this.files[0])">
 					</div>						
 
 					<div class="form-group">

@@ -7,9 +7,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 
 public class Filme implements Serializable{
 
@@ -31,6 +28,8 @@ public class Filme implements Serializable{
 	private String sinopse;
 	private String duracao;
 	private String lancamento;
+	
+	//@Lob
 	private byte[] imagem;
 	
 	@NotNull(message="Favor selecionar uma Categoria")
