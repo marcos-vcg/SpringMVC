@@ -84,10 +84,29 @@ public class FilmesController {
     
     @RequestMapping("editFilme")
     public String edit(Filme filme, Model model) {
-    	model.addAttribute("filme", filmeDao.select(filme.getId()));
+    	
+    	if(model.getAttribute("filme") == null) {
+    		model.addAttribute("filme", filmeDao.select(filme.getId()));
+    	}
+    	
+    	
+    	//model.addAttribute("filme", filmeDao.select(filme.getId()));
     	model.addAttribute("generos", generoDao.selectAll());
     	model.addAttribute("categorias", categoriaDao.selectAll());
         return "filme/cadastro";
+    }
+    
+    
+    @RequestMapping("updateFilme")
+    public String update(@Valid Filme filme , BindingResult result) {
+    	
+    	// Verifica algum erro geral
+    	if(result.hasErrors()) {
+            return "forward:editFilme";
+        }
+    	
+    		filmeDao.update(filme);
+    		return "redirect:filmes";
     }
     
     
@@ -97,10 +116,4 @@ public class FilmesController {
         return "redirect:filmes";
     }
     
-    
-    @RequestMapping("updateFilme")
-    public String update(Filme filme) {
-      filmeDao.update(filme);
-      return "redirect:filmes";
-    }
 }
