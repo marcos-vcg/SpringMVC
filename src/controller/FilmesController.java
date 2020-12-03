@@ -82,13 +82,35 @@ public class FilmesController {
     }
     
     
+    @RequestMapping("selectFilme")
+    public String select(Filme filme, Model model) {
+    	model.addAttribute("filme", filmeDao.select(filme.getId()));
+    	return "forward:editFilme";
+    }
+    
     @RequestMapping("editFilme")
-    public String edit(Filme filme, Model model) {
+    public String edit(/*Filme filme,*/ Model model) {
     	
-    	if(model.getAttribute("filme") == null) {
+    	/*
+    	if(filme.getTitulo() == null) {
     		model.addAttribute("filme", filmeDao.select(filme.getId()));
+    	} else {
+    		filme = null;
     	}
+    	if(filme.getId() != null) {
+    		model.addAttribute("filme", filmeDao.select(filme.getId()));
+    	} 
+    	filme.setId(null);
+    	*/
     	
+    	
+    	
+    	/*if(filme.getTitulo() == null) {
+    		model.addAttribute("filme", filmeDao.select(filme.getId()));
+    		filme = null;
+    	}*/
+    	
+   
     	
     	//model.addAttribute("filme", filmeDao.select(filme.getId()));
     	model.addAttribute("generos", generoDao.selectAll());
