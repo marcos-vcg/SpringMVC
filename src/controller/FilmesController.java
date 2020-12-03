@@ -1,19 +1,12 @@
 package controller;
 
-import java.util.List;
-
-import javax.servlet.annotation.MultipartConfig;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import bean.Filme;
 import dao.CategoriaDao;
@@ -22,7 +15,7 @@ import dao.FilmeDao;
 import dao.GeneroDao;
 
 
-//@MultipartConfig
+
 @Controller
 public class FilmesController {
 	
@@ -33,89 +26,48 @@ public class FilmesController {
 	
 	
 
-
-    @RequestMapping("novoFilme")
-    public String form(/*Filme filme,*/ Model model) {
-    	
-    	/*
-    	if (filme == null) {
-    		filme = new Filme();
-    		model.addAttribute("filme", filme);
-    	}
-    	
-    	if(model.getAttribute("filme") == null) {
-    		model.addAttribute("filme", new Filme());
-    	};*/
-    	
-    	
-    	//model.addAttribute("filme", filme);
-    	model.addAttribute("generos", generoDao.selectAll());
-    	model.addAttribute("categorias", categoriaDao.selectAll());
-        return "filme/cadastro";
-    }
-
-    
-    
-    // Método instancia e seta o objeto a partir dos campos de mesmo nome dos atributos da Classe
-    //@RequestMapping("insertFilme")
-    @RequestMapping(value = {"/insertFilme"}, method = RequestMethod.POST)
-    public String adiciona(@Valid Filme filme , BindingResult result/*, RedirectAttributes atributes*/) {
-    	
-    	
-    	// Verifica algum erro geral
-    	if(result.hasErrors()) {
-    		//atributes.addFlashAttribute("mensagem", "Verifique os Campos!");
-            return "forward:novoFilme";
-        }
-
-        filmeDao.insert(filme);
-        //atributes.addFlashAttribute("mensagem", "Filme Inserido!");
-        return "redirect:filmes";
-    }
-    
-    
     // Recebe o modelo, adiciona um atributo a ele e o retorno redireciona para o JSP
     @RequestMapping(value = "filmes", method = RequestMethod.GET)
 	public String lista(Model model) {
-	    model.addAttribute("filmes", filmeDao.selectAll());
+	    
+    	model.addAttribute("filmes", filmeDao.selectAll());
 	    return "filme/lista";
     }
     
     
-    @RequestMapping("selectFilme")
-    public String select(Filme filme, Model model) {
-    	model.addAttribute("filme", filmeDao.select(filme.getId()));
-    	return "forward:editFilme";
-    }
-    
-    @RequestMapping("editFilme")
-    public String edit(/*Filme filme,*/ Model model) {
+
+    @RequestMapping("formularioFilme")
+    public String form(/*Filme filme,*/ Model model) {   	
     	
-    	/*
-    	if(filme.getTitulo() == null) {
-    		model.addAttribute("filme", filmeDao.select(filme.getId()));
-    	} else {
-    		filme = null;
-    	}
-    	if(filme.getId() != null) {
-    		model.addAttribute("filme", filmeDao.select(filme.getId()));
-    	} 
-    	filme.setId(null);
-    	*/
-    	
-    	
-    	
-    	/*if(filme.getTitulo() == null) {
-    		model.addAttribute("filme", filmeDao.select(filme.getId()));
-    		filme = null;
-    	}*/
-    	
-   
-    	
-    	//model.addAttribute("filme", filmeDao.select(filme.getId()));
+    	// Não pode receber um objeto pq impede a visualização da validacao do Insert/Update
     	model.addAttribute("generos", generoDao.selectAll());
     	model.addAttribute("categorias", categoriaDao.selectAll());
         return "filme/cadastro";
+    }
+
+    
+    
+    // Método instancia e seta o objeto Filme a partir dos campos de mesmo nome dos atributos da Classe
+    @RequestMapping(value = {"/insertFilme"}, method = RequestMethod.POST)
+    public String adiciona(@Valid Filme filme , BindingResult result) {
+    		
+    	// Verifica algum erro geral
+    	if(result.hasErrors()) {	
+            return "forward:formularioFilme";
+        }
+
+        filmeDao.insert(filme);
+        return "redirect:filmes";
+    }
+    
+    
+    
+    @RequestMapping("editFilme")
+    public String edit(Filme filme, Model model) {
+    	    
+    	// Recebe o id do filme, consulta ele no BD, add ao atributo do Model e repassa para o formulário de cadastro/edicao
+    	model.addAttribute("filme", filmeDao.select(filme.getId()));
+        return "forward:formularioFilme";
     }
     
     
@@ -124,11 +76,11 @@ public class FilmesController {
     	
     	// Verifica algum erro geral
     	if(result.hasErrors()) {
-            return "forward:editFilme";
+            return "forward:formularioFilme";
         }
     	
-    		filmeDao.update(filme);
-    		return "redirect:filmes";
+		filmeDao.update(filme);
+		return "redirect:filmes";
     }
     
     
