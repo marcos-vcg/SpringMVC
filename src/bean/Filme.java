@@ -16,7 +16,7 @@ public class Filme implements Serializable{
 	private Integer id;
 	
 	@NotEmpty(message="Favor Informar o Título")
-	@Size(max=30, message="Tamanho máximo de 30 caracteres")
+	@Size(max=30, message="No máximo 30 caracteres")
 	private String titulo;
 	
 	@NotNull(message="Favor selecionar um Gênero")

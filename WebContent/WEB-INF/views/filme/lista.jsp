@@ -13,21 +13,8 @@
 	</head>
 	
 	<body>
-		<header>
-			<nav class="navbar navbar-expand-md navbar-dark" style="background-color: blue">
-				<a href="http://localhost:8080/loc" class="navbar-brand"> Locadora Digital</a>
-				<ul class="navbar-nav">
-					<li><a href="<%=request.getContextPath()%>/generos" class="nav-link">Generos</a></li>
-					<li><a href="<%=request.getContextPath()%>/categorias" class="nav-link">Categorias</a></li>
-					<li><a href="<%=request.getContextPath()%>/filmes" class="nav-link">Filmes</a></li>
-					<li><a href="<%=request.getContextPath()%>/clientes" class="nav-link">Clientes</a></li>
-					<li><a href="<%=request.getContextPath()%>/locacaos" class="nav-link">Locações</a></li>
-				</ul>
-			</nav>
-		</header>
+		<c:import url="/WEB-INF/views/menu.jsp" />
 		
-		<br>
-	
 		<div class="row">
 			<div class="container">
 				<h3 class="text-center">Lista de Filmes</h3>

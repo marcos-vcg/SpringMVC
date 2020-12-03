@@ -20,8 +20,12 @@
       <property name = "suffix" value = ".jsp" />
    </bean>
    
+   	
+   	<!-- Opcional: arquivo com as mensagens de validacao para retirar dos beans das classes 
+		<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+	      	<property name="basename" value="/WEB-INF/mensagens" />
+	  	</bean>   	-->
+  	
    
    	<!-- bean id="validator"  class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/-->
-
-   
 </beans>

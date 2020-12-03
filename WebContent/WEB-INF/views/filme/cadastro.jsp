@@ -11,24 +11,7 @@
 	</head>
 	
 	<body>
-		
-		<!-- c:import url="resources/componentes/menu.jsp" /  -->
-		
-		
-	
-		<header>
-			<nav class="navbar navbar-expand-md navbar-dark" style="background-color: blue">
-				<a href="http://localhost:8080/loc" class="navbar-brand"> Locadora Digital</a>
-				<ul class="navbar-nav">
-					<li><a href="<%=request.getContextPath()%>/generos" class="nav-link">Generos</a></li>
-					<li><a href="<%=request.getContextPath()%>/categorias" class="nav-link">Categorias</a></li>
-					<li><a href="<%=request.getContextPath()%>/filmes" class="nav-link">Filmes</a></li>
-					<li><a href="<%=request.getContextPath()%>/clientes" class="nav-link">Clientes</a></li>
-					<li><a href="<%=request.getContextPath()%>/locacaos" class="nav-link">Locações</a></li>
-				</ul>				
-			</nav>
-		</header><br>
-		
+		<c:import url="/WEB-INF/views/menu.jsp" />
 		
 		<div class="container col-md-8">
 			<div class="card card-body">	
@@ -88,7 +71,5 @@
 				</form>
 			</div>
 		</div>
-		
-		<%= (request.getAttribute("msg") != null) ? request.getAttribute("msg") : "" %>	
 	</body>
 </html>
