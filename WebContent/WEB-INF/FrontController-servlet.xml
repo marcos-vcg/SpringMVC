@@ -21,6 +21,15 @@
    </bean>
    
    	
+   	
+   	
+   	
+   	<!-- 
+   	<bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver" /> 
+    -->
+   	
+   	
+   	
    	<!-- Opcional: arquivo com as mensagens de validacao para retirar dos beans das classes 
 		<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 	      	<property name="basename" value="/WEB-INF/mensagens" />

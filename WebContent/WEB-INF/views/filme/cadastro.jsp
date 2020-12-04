@@ -18,16 +18,17 @@
 				<c:if test="${filme.id == null}"><h2>Novo Filme</h2></c:if>
 				<c:if test="${filme.id != null}"><h2>Editar Filme</h2></c:if>
 				
-				<form action=<c:if test="${filme.id == null}">"insertFilme"</c:if>
-									<c:if test="${filme.id != null}">"updateFilme"</c:if> 
-									method="post" enctype="multipart/form-data">
+				<form action=
+							<c:if test="${filme.id == null}">"insertFilme"</c:if>
+							<c:if test="${filme.id != null}">"updateFilme"</c:if> 
+							method="post" enctype="multipart/form-data">
 					
 					<c:if test="${filme.id != null}"><input type="hidden" name="id" value='${filme.id}'/></c:if>
 			
 					<div class="container text-right">
 						<img id="mostrarImagem" <c:if test="${filme.id != null}">src="imagemFilme?id=<c:out value='${filme.id}' />"</c:if>  alt="Foto de Capa"  style="width: 100px; height: 130px"  /> 					
 						<br>
-						<input name="imagem" id="imagem" type="file" accept="image/*"  onchange="document.getElementById('mostrarImagem').src = window.URL.createObjectURL(this.files[0])">
+						<input name="arquivo" id="imagem" type="file" accept="image/*"  onchange="document.getElementById('mostrarImagem').src = window.URL.createObjectURL(this.files[0])">
 					</div>						
 
 					<div class="form-group">

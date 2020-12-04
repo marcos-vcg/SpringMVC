@@ -5,12 +5,14 @@ import java.io.IOException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.validation.Valid;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -77,8 +79,9 @@ public class FilmesController {
     }
     
     
+    //@RequestMapping(value = "/updateFilme", headers = ("content-type=multipart/*"), method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @RequestMapping("updateFilme")
-    public String update(@Valid Filme filme , BindingResult result, @RequestParam("imagem") MultipartFile file) {
+    public String update( @Valid Filme filme, BindingResult result, @RequestParam("arquivo") MultipartFile arquivo) {
     	
     	// Verifica algum erro geral
     	if(result.hasErrors()) {
@@ -87,7 +90,9 @@ public class FilmesController {
     	
     	
     	try {
-			filme.setImagem(file.getBytes());
+			
+    		byte[] bytes = arquivo.getBytes();
+    		filme.setImagem(bytes);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
