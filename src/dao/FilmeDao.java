@@ -1,23 +1,40 @@
 package dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import bean.Cliente;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+
+
 import bean.Filme;
 
+import javax.sql.DataSource;
+
+@Repository
 public class FilmeDao {
-	private DataSource dataSource;
+	//private DataSource dataSource;
 	private String tabela;
 	private GeneroDao generoDao;
 	private CategoriaDao categoriaDao;
+	private Connection connection;
 	
-	public FilmeDao(DataSource datasource){
-		this.dataSource = datasource;
-		this.tabela = "filme";
-		generoDao = new GeneroDao(dataSource);
-		categoriaDao = new CategoriaDao(dataSource);
+	
+	
+	@Autowired
+	public FilmeDao(DataSource datasource, GeneroDao generoDao, CategoriaDao categoriaDao){
+		
+		try {
+			this.connection = datasource.getConnection();
+			this.generoDao = generoDao;
+			this.categoriaDao = categoriaDao;
+			this.tabela = "filme";
+		} catch (Exception ex) {
+			System.err.println("Erro ao instanciar FilmeDao " + ex.getMessage());
+		}
 	}
 	
 	
@@ -27,7 +44,7 @@ public class FilmeDao {
 		
 		try {
 			String SQL = "SELECT * FROM " + tabela + " WHERE id = ?;";
-			java.sql.PreparedStatement ps = dataSource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
@@ -66,7 +83,7 @@ public class FilmeDao {
 		
 		try {
 			String SQL = "SELECT * FROM " + tabela + "  ORDER BY titulo;";
-			java.sql.PreparedStatement ps = dataSource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			ResultSet rs = ps.executeQuery();
 	
 			while(rs.next()) {
@@ -108,7 +125,7 @@ public class FilmeDao {
 		
 		try {
 			String SQL = "SELECT * FROM " + tabela + " where titulo LIKE ? OR genero LIKE ? ORDER BY titulo;";
-			java.sql.PreparedStatement ps = dataSource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			busca = "%"+busca+"%";
 			ps.setString(1, busca);
@@ -152,7 +169,7 @@ public class FilmeDao {
 		try {
 			
 			String SQL = "INSERT INTO filme (titulo, genero, copias, sinopse, duracao, lancamento, imagem , categoria) VALUES (?,?,?,?,?,?,?,?)";
-			java.sql.PreparedStatement ps = dataSource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			//ps.setString(1, tabela);
 			ps.setString(1, f.getTitulo());
@@ -184,7 +201,7 @@ public class FilmeDao {
 		try {
 			
 			String SQL = "UPDATE " + tabela + " SET titulo = ?, genero = ?, copias = ?, sinopse = ?, duracao = ?, lancamento = ?, imagem = ?, categoria = ? WHERE id = ?;" ;	
-			java.sql.PreparedStatement ps = dataSource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			ps.setString(1, f.getTitulo());
 			ps.setInt(2, f.getGenero().getId());
@@ -216,7 +233,7 @@ public class FilmeDao {
 		try {
 			
 			String SQL = "DELETE FROM " + tabela + " WHERE id = ?;" ;			
-			java.sql.PreparedStatement ps = dataSource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			ps.setInt(1, id);
 			

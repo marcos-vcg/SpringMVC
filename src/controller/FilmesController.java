@@ -25,11 +25,16 @@ import dao.GeneroDao;
 @Controller
 public class FilmesController {
 	
-	private DataSource dataSource = new DataSource();
-	private FilmeDao filmeDao = new FilmeDao(dataSource);  
-	private GeneroDao generoDao = new GeneroDao(dataSource);
-	private CategoriaDao categoriaDao = new CategoriaDao(dataSource);
+	private final FilmeDao filmeDao;  
+	private final GeneroDao generoDao;
+	private final CategoriaDao categoriaDao;
+	 
 	
+	public FilmesController(FilmeDao filmeDao, GeneroDao generoDao, CategoriaDao categoriaDao) {
+		this.filmeDao = filmeDao; 
+		this.generoDao = generoDao;
+		this.categoriaDao = categoriaDao;
+	}
 	
 
     
