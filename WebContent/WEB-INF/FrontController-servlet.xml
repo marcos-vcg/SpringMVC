@@ -20,6 +20,13 @@
       <property name = "suffix" value = ".jsp" />
    </bean>
    
+	<!-- COMPONENTE responsável por estabelecer a conexão através do JDBC -->
+	<bean id="mysqlDataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+	  <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+	  <property name="url" value="jdbc:mysql://localhost/locadora"/>
+	  <property name="username" value="root"/>
+	  <property name="password" value="0102301023"/>
+	</bean>
 
    	
    	<!-- Opcional: arquivo com as mensagens de validacao para retirar dos beans das classes 
