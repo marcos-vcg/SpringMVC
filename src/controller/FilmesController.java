@@ -5,14 +5,12 @@ import java.io.IOException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.validation.Valid;
 
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,15 +32,25 @@ public class FilmesController {
 	
 	
 
-    // Recebe o modelo, adiciona um atributo a ele e o retorno redireciona para o JSP
+    
     @RequestMapping(value = "filmes", method = RequestMethod.GET)
 	public String lista(Model model) {
 	    
+    	// Recebe o modelo, adiciona um atributo a ele e o retorno redireciona para o JSP
     	model.addAttribute("filmes", filmeDao.selectAll());
 	    return "filme/lista";
     }
     
     
+    
+    @RequestMapping(value="buscaFilmes")
+    public String busca(String busca, Model model) {
+	    
+    	model.addAttribute("filmes", filmeDao.search(busca));
+	    return "filme/lista";
+    }
+    
+ 
 
     @RequestMapping("formularioFilme")
     public String form(/*Filme filme,*/ Model model) {   	
@@ -86,6 +94,7 @@ public class FilmesController {
     }
     
     
+    
     //@RequestMapping(value = "/updateFilme", headers = ("content-type=multipart/*"), method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @RequestMapping("updateFilme")
     public String update( @Valid Filme filme, BindingResult result, @RequestParam("arquivo") MultipartFile arquivo) {
@@ -114,6 +123,7 @@ public class FilmesController {
     }
     
     
+    
     @RequestMapping(value="deleteFilme", method=RequestMethod.GET)
     public String remove(Filme filme) {
         filmeDao.delete(filme.getId());
@@ -121,8 +131,7 @@ public class FilmesController {
     }
     
     
-    
-    
+ 
     // Imagens precisam ser enviadas em todo o corpo da resposta
     @ResponseBody
     @RequestMapping(value="imagemFilme", method=RequestMethod.GET)

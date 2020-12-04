@@ -24,7 +24,7 @@
 	        <max-file-size>10485760</max-file-size>
 	        <max-request-size>20971520</max-request-size>
 	        <file-size-threshold>5242880</file-size-threshold>
-    	</multipart-config>
+    	</multipart-config> 
    </servlet>
 
    <servlet-mapping>

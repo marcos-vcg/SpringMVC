@@ -22,9 +22,9 @@
 				
 				<div class="navbar">	
 					<a href="<%=request.getContextPath()%>/formularioFilme" class="btn btn-success">Novo Filme</a>
-					<form class="form-inline" action="filme">
-						<input class="form-control" type="text" name="txtBusca">
-						<input type="submit" value="search" class="btn btn-outline-success" name="action">
+					<form class="form-inline" action="buscaFilmes">
+						<input class="form-control" type="text" name="busca">
+						<input type="submit" value="search" class="btn btn-outline-success">
 					</form>
 				</div>
 				
