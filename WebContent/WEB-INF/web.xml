@@ -31,5 +31,11 @@
       <servlet-name>FrontController</servlet-name>
       <url-pattern>/</url-pattern>
    </servlet-mapping>
+   
+   
+   <!-- configurar a secao opcional -->
+  <session-config>
+    <session-timeout>3</session-timeout>
+  </session-config>
   
 </web-app>

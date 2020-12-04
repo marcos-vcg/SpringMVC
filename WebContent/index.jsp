@@ -8,7 +8,9 @@
 	</head>
 	
 	<body>
-		<h1>Começo!</h1>
+		<h2>Página inicial da Locadora Digital</h2>
+    	<p>Bem vindo, ${usuarioLogado.login}</p> 
+
 		<a href="hello">Olá!</a>
 		<a href="student">Add Estudante</a>
 		<a href="novaTarefa">Adicionar Tarefa!</a>
