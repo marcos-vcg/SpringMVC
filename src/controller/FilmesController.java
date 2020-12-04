@@ -57,13 +57,20 @@ public class FilmesController {
     
     // Método instancia e seta o objeto Filme a partir dos campos de mesmo nome dos atributos da Classe
     @RequestMapping(value = {"/insertFilme"}, method = RequestMethod.POST)
-    public String adiciona(@Valid Filme filme , BindingResult result) {
+    public String adiciona(@Valid Filme filme , BindingResult result, @RequestParam("arquivo") MultipartFile arquivo) {
     		
     	// Verifica algum erro geral
     	if(result.hasErrors()) {	
             return "forward:formularioFilme";
         }
 
+    	try {
+    		byte[] bytes = arquivo.getBytes();
+    		filme.setImagem(bytes);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
         filmeDao.insert(filme);
         return "redirect:filmes";
     }
@@ -88,14 +95,19 @@ public class FilmesController {
             return "forward:formularioFilme";
         }
     	
-    	
-    	try {
-			
-    		byte[] bytes = arquivo.getBytes();
-    		filme.setImagem(bytes);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    	if(arquivo.isEmpty()) {
+    		filme.setImagem(filmeDao.select(filme.getId()).getImagem());
+    	} else {
+    		
+		    try {
+	    		byte[] bytes = arquivo.getBytes();
+	    		filme.setImagem(bytes);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+    		
+    	}
+
     	
 		filmeDao.update(filme);
 		return "redirect:filmes";
