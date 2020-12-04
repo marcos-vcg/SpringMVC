@@ -1,5 +1,8 @@
 package controller;
 
+import java.io.IOException;
+
+import javax.servlet.annotation.MultipartConfig;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -7,6 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import bean.Filme;
 import dao.CategoriaDao;
@@ -15,7 +21,7 @@ import dao.FilmeDao;
 import dao.GeneroDao;
 
 
-
+@MultipartConfig
 @Controller
 public class FilmesController {
 	
@@ -72,12 +78,19 @@ public class FilmesController {
     
     
     @RequestMapping("updateFilme")
-    public String update(@Valid Filme filme , BindingResult result) {
+    public String update(@Valid Filme filme , BindingResult result, @RequestParam("imagem") MultipartFile file) {
     	
     	// Verifica algum erro geral
     	if(result.hasErrors()) {
             return "forward:formularioFilme";
         }
+    	
+    	
+    	try {
+			filme.setImagem(file.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     	
 		filmeDao.update(filme);
 		return "redirect:filmes";
@@ -88,6 +101,16 @@ public class FilmesController {
     public String remove(Filme filme) {
         filmeDao.delete(filme.getId());
         return "redirect:filmes";
+    }
+    
+    
+    
+    
+    // Imagens precisam ser enviadas em todo o corpo da resposta
+    @ResponseBody
+    @RequestMapping(value="imagemFilme", method=RequestMethod.GET)
+    public byte[] buscaImagem(Filme filme) {   
+        return filmeDao.select(filme.getId()).getImagem();
     }
     
 }

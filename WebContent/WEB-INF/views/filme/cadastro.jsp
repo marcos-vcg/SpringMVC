@@ -20,14 +20,14 @@
 				
 				<form action=<c:if test="${filme.id == null}">"insertFilme"</c:if>
 									<c:if test="${filme.id != null}">"updateFilme"</c:if> 
-									method="post" >
+									method="post" enctype="multipart/form-data">
 					
 					<c:if test="${filme.id != null}"><input type="hidden" name="id" value='${filme.id}'/></c:if>
 			
 					<div class="container text-right">
-						<img id="mostrarImagem" alt="Foto de Capa"  style="width: 100px; height: 130px"  /> 					
+						<img id="mostrarImagem" <c:if test="${filme.id != null}">src="imagemFilme?id=<c:out value='${filme.id}' />"</c:if>  alt="Foto de Capa"  style="width: 100px; height: 130px"  /> 					
 						<br>
-						<input name="image" id="imagem" type="file" accept="image/*"  onchange="document.getElementById('mostrarImagem').src = window.URL.createObjectURL(this.files[0])">
+						<input name="imagem" id="imagem" type="file" accept="image/*"  onchange="document.getElementById('mostrarImagem').src = window.URL.createObjectURL(this.files[0])">
 					</div>						
 
 					<div class="form-group">
