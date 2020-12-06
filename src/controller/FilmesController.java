@@ -60,7 +60,7 @@ public class FilmesController {
     @RequestMapping("formularioFilme")
     public String form(/*Filme filme,*/ Model model) {   	
     	
-    	// Não pode receber um objeto pq impede a visualização da validacao do Insert/Update
+    	// Nï¿½o pode receber um objeto pq impede a visualizaï¿½ï¿½o da validacao do Insert/Update
     	model.addAttribute("generos", generoDao.selectAll());
     	model.addAttribute("categorias", categoriaDao.selectAll());
         return "filme/cadastro";
@@ -68,7 +68,7 @@ public class FilmesController {
 
     
     
-    // Método instancia e seta o objeto Filme a partir dos campos de mesmo nome dos atributos da Classe
+    // Metodo instancia e seta o objeto Filme a partir dos campos de mesmo nome dos atributos da Classe
     @RequestMapping(value = {"/insertFilme"}, method = RequestMethod.POST)
     public String adiciona(@Valid Filme filme , BindingResult result, @RequestParam("arquivo") MultipartFile arquivo) {
     		
@@ -93,7 +93,7 @@ public class FilmesController {
     @RequestMapping("editFilme")
     public String edit(Filme filme, Model model) {
     	    
-    	// Recebe o id do filme, consulta ele no BD, add ao atributo do Model e repassa para o formulário de cadastro/edicao
+    	// Recebe o id do filme, consulta ele no BD, add ao atributo do Model e repassa para o formulario de cadastro/edicao
     	model.addAttribute("filme", filmeDao.select(filme.getId()));
         return "forward:formularioFilme";
     }

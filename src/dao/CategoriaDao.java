@@ -6,12 +6,17 @@ import java.util.ArrayList;
 
 import bean.Categoria;
 
+
+@Repository
 public class CategoriaDao {
-	private DataSource datasource;
+	private Connection connection;
 	private String tabela;
 	
+
+	
+	@Autowired
 	public CategoriaDao(DataSource datasource){
-		this.datasource = datasource;
+		this.connection = datasource.getConnection();
 		this.tabela = "categoria";
 	}
 	
@@ -23,7 +28,7 @@ public class CategoriaDao {
 		
 		try {
 			String SQL = "SELECT * FROM " + tabela + " WHERE id = ?";
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
@@ -53,7 +58,7 @@ public class CategoriaDao {
 		
 		try {
 			String SQL = "SELECT * FROM " + tabela + " ORDER BY nome";
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
@@ -80,11 +85,11 @@ public class CategoriaDao {
 		try {
 			
 			String SQL = "INSERT INTO " + tabela + " (nome, preco) VALUES ( ?, ?);";
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			ps.setString(1, categoria.getNome());
 			ps.setString(2, categoria.getPreco());
-			ps.executeUpdate();						// Usado para fazer qualquer alteração. Não tem nenhum retorno
+			ps.executeUpdate();						// Usado para fazer qualquer alteraï¿½ï¿½o. Nï¿½o tem nenhum retorno
 			ps.close();
 			
 		} catch (Exception e) {
@@ -101,7 +106,7 @@ public class CategoriaDao {
 		try {
 			
 			String SQL = "UPDATE " + tabela + " SET nome = ?, preco = ? WHERE id = ?;" ;			
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			ps.setString(1, categoria.getNome());
 			ps.setString(2, categoria.getPreco());
@@ -126,11 +131,11 @@ public class CategoriaDao {
 		try {
 			
 			String SQL = "DELETE FROM " + tabela + " WHERE id = ?;" ;			
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			ps.setInt(1, id);
 			
-			rowDeleted = ps.executeUpdate() > 0;											// Usado para fazer qualquer alteração. Não tem nenhum retorno
+			rowDeleted = ps.executeUpdate() > 0;											// Usado para fazer qualquer alteraï¿½ï¿½o. Nï¿½o tem nenhum retorno
 			ps.close();
 			
 		} catch (Exception e) {
@@ -142,7 +147,7 @@ public class CategoriaDao {
 	
 	
 	
-	// Trata os erros de todas as excessões das chamadas SQL
+	// Trata os erros de todas as excessï¿½es das chamadas SQL
 	private void printSQLException(SQLException ex) {
 		for (Throwable e : ex) {
 			if (e instanceof SQLException) {

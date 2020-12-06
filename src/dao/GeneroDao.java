@@ -7,23 +7,32 @@ import java.util.List;
 
 import bean.Genero;
 
+
+@Repository
 public class GeneroDao {
-	private DataSource datasource;
+
 	private String tabela;
-	
-	public GeneroDao(DataSource datasource){
-		this.datasource = datasource;
+	private Connection connection;
+	private GeneroDao generoDao;
+
+
+
+	@Autowired
+	public GeneroDao(DataSource datasource, GeneroDao generoDao){
+		this.connection = datasource.getConnection();
+		this.generoDao = generoDao;
 		this.tabela = "genero";
 	}
 	
 	
+
 	// Select Genero By Id
 	public Genero select(int id){
 		Genero genero = null;
 		
 		try {
 			String SQL = "SELECT * FROM " + tabela + " WHERE id = ?";
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			
@@ -53,7 +62,7 @@ public class GeneroDao {
 			String SQL = "SELECT * FROM " + tabela + " ORDER BY nome";
 			
 			// Create Statement using connection
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			// Execute the query or update query
 			ResultSet rs = ps.executeQuery();
@@ -81,13 +90,13 @@ public class GeneroDao {
 	public void insert(Genero genero) {
 		try {
 			String SQL = "INSERT INTO " + tabela + " (nome) VALUES (?);";
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			ps.setString(1, genero.getNome());
-			ps.executeUpdate();						// Usado para fazer qualquer alteração. Não tem nenhum retorno
+			ps.executeUpdate();						// Usado para fazer qualquer alteraï¿½ï¿½o. Nï¿½o tem nenhum retorno
 			ps.close();
 			
 		} catch (SQLException e) {
-			printSQLException(e);				//Funcao criada para tratar Exceções SQL
+			printSQLException(e);				//Funcao criada para tratar Exceï¿½ï¿½es SQL
 		} catch (Exception e) {
 			System.out.println("Erro: " + e.getMessage());
 			
@@ -102,8 +111,8 @@ public class GeneroDao {
 		
 		try {
 			
-			String SQL = "UPDATE " + tabela + " SET nome = ? WHERE id = ? ;" ;			// id é int, não colocar aspassimples
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			String SQL = "UPDATE " + tabela + " SET nome = ? WHERE id = ? ;" ;			// id ï¿½ int, nï¿½o colocar aspassimples
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			ps.setString(1, genero.getNome());
 			ps.setInt(2, genero.getId());
@@ -126,11 +135,11 @@ public class GeneroDao {
 		try {
 			
 			String SQL = "DELETE FROM " + tabela + " WHERE id = ?;" ;			
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			ps.setInt(1, id);
 			
-			//ps.executeUpdate()							// Usado para fazer qualquer alteração. Não tem nenhum retorno
+			//ps.executeUpdate()							// Usado para fazer qualquer alteraï¿½ï¿½o. Nï¿½o tem nenhum retorno
 			rowDeleted = ps.executeUpdate() > 0;			// Retorno Indica se obteve sucesso								
 			ps.close();
 			
@@ -142,7 +151,7 @@ public class GeneroDao {
 	}
 	
 	
-	// Trata os erros de todas as excessões das chamadas SQL
+	// Trata os erros de todas as excessï¿½es das chamadas SQL
 	private void printSQLException(SQLException ex) {
 		for (Throwable e : ex) {
 			if (e instanceof SQLException) {
