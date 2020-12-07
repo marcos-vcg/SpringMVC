@@ -1,29 +1,44 @@
 package dao;
 
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.sql.DataSource;
 import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import bean.Locacao;
 
 
+
+//@Repository
 public class LocacaoDao {
-	private DataSource datasource;
+	private Connection connection;
 	private ClienteDao clienteDao; 
-	private FilmeDao filmeDao;
+	private JdbcFilmeDao filmeDao;
 	private String tabela;
 	
-	public LocacaoDao(DataSource datasource){
-		this.datasource = datasource;
-		this.clienteDao = new ClienteDao(datasource);
-		this.filmeDao = new FilmeDao(datasource);
+	
+	//@Autowired
+	public LocacaoDao(DataSource datasource, ClienteDao clienteDao, JdbcFilmeDao filmeDao){
+		try {
+			this.connection = datasource.getConnection();
+			this.clienteDao = clienteDao;
+			this.filmeDao = filmeDao;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		this.tabela = "locacao";
 	}
 	
 	public Locacao select(int id) {
 		try {
 			String SQL = "SELECT * FROM " + tabela + " WHERE id = ?";
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			ps.setInt(1, id);
 			
@@ -55,7 +70,7 @@ public class LocacaoDao {
 	public ArrayList<Locacao> filmesDoCLiente(int id){
 		try {
 			String SQL = "SELECT * FROM " + tabela + " WHERE cliente = ? ORDER BY aluguel";
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			ps.setInt(1, id);
 			
@@ -87,7 +102,7 @@ public class LocacaoDao {
 	public ArrayList<Locacao> selectAll(){
 		try {
 			String SQL = "SELECT * FROM " + tabela + " ORDER BY aluguel";
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			ResultSet rs = ps.executeQuery();
 			
@@ -119,7 +134,7 @@ public class LocacaoDao {
 		try {
 			
 			String SQL = "INSERT INTO " + tabela + " (cliente, filme, aluguel) VALUES (?,?,?)";
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			ps.setInt(1, l.getCliente().getId());
 			ps.setInt(2, l.getFilme().getId());
@@ -137,7 +152,7 @@ public class LocacaoDao {
 		try {
 			
 			String SQL = "SELECT COUNT(*) FROM " + tabela + " WHERE filme = ? AND devolucao = null ;";
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			ps.setInt(1, id);
 			
@@ -165,7 +180,7 @@ public class LocacaoDao {
 		try {
 			
 			String SQL = "UPDATE " + tabela + " SET devolucao = ? WHERE id = ?;" ;			// id é int, não colocar aspassimples
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			ps.setDate(1, new Date(l.getDevolucao().getTime()));
 			ps.setInt(2, l.getId());
@@ -182,7 +197,7 @@ public class LocacaoDao {
 		try {
 			
 			String SQL = "DELETE FROM " + tabela + " WHERE id = ?;" ;			
-			java.sql.PreparedStatement ps = datasource.getConnection().prepareStatement(SQL);
+			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
 			ps.setInt(1, id);
 			

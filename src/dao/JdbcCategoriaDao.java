@@ -1,79 +1,82 @@
 package dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.sql.DataSource;
 import java.util.ArrayList;
-import java.util.List;
 
-import bean.Genero;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import bean.Categoria;
 
 
 @Repository
-public class GeneroDao {
-
-	private String tabela;
+public class JdbcCategoriaDao {
 	private Connection connection;
-	private GeneroDao generoDao;
+	private String tabela;
+	
 
-
-
+	
 	@Autowired
-	public GeneroDao(DataSource datasource, GeneroDao generoDao){
-		this.connection = datasource.getConnection();
-		this.generoDao = generoDao;
-		this.tabela = "genero";
+	public JdbcCategoriaDao(DataSource dataSource){
+		try {
+			this.connection = dataSource.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		this.tabela = "categoria";
 	}
 	
 	
-
-	// Select Genero By Id
-	public Genero select(int id){
-		Genero genero = null;
+	// Select By Id
+	public Categoria select(int id) {
+		
+		Categoria categoria = null;
 		
 		try {
 			String SQL = "SELECT * FROM " + tabela + " WHERE id = ?";
 			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
+			
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				genero = new Genero();
-				genero.setId(id);
-				genero.setNome(rs.getString("nome"));
+				categoria = new Categoria();
+				categoria.setId(rs.getInt("id"));
+				categoria.setNome(rs.getString("nome"));
+				categoria.setPreco(rs.getString("preco"));
 			}
 			
 			ps.close();
 			
 		} catch(SQLException ex) {
-			System.err.println("Erro ao Recuperar genero " + ex.getMessage());
+			System.err.println("Erro ao Recuperar categoria " + ex.getMessage());
 		} catch(Exception ex) {
 			System.err.println("Erro Geral " + ex.getMessage());
 		}
-		return genero;
+		return categoria;
 	}
 	
 	
-	// Select All Generos
-	public List<Genero> selectAll(){
+	// Select All
+	public ArrayList<Categoria> selectAll(){
 		
-		List<Genero> generos = new ArrayList<Genero>();
+		ArrayList<Categoria> lista = new ArrayList<Categoria>();
 		
 		try {
 			String SQL = "SELECT * FROM " + tabela + " ORDER BY nome";
-			
-			// Create Statement using connection
 			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
-			
-			// Execute the query or update query
 			ResultSet rs = ps.executeQuery();
 			
-			// Process the ResultSet Objects
 			while(rs.next()) {
-				Genero gen = new Genero();
-				gen.setId(rs.getInt("id"));
-				gen.setNome(rs.getString("nome"));
+				Categoria categ = new Categoria();
+				categ.setId(rs.getInt("id"));
+				categ.setNome(rs.getString("nome"));
+				categ.setPreco(rs.getString("preco"));
 		
-				generos.add(gen);
+				lista.add(categ);
 			}
 			ps.close();
 			
@@ -82,40 +85,41 @@ public class GeneroDao {
 		} catch(Exception ex) {
 			System.err.println("Erro Geral " + ex.getMessage());
 		}
-		return generos;
+		return lista;
 	}
 	
 	
-	// Insert Genero passed
-	public void insert(Genero genero) {
+	// Insert
+	public void insert(Categoria categoria) {
 		try {
-			String SQL = "INSERT INTO " + tabela + " (nome) VALUES (?);";
+			
+			String SQL = "INSERT INTO " + tabela + " (nome, preco) VALUES ( ?, ?);";
 			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
-			ps.setString(1, genero.getNome());
+			
+			ps.setString(1, categoria.getNome());
+			ps.setString(2, categoria.getPreco());
 			ps.executeUpdate();						// Usado para fazer qualquer altera��o. N�o tem nenhum retorno
 			ps.close();
 			
-		} catch (SQLException e) {
-			printSQLException(e);				//Funcao criada para tratar Exce��es SQL
 		} catch (Exception e) {
 			System.out.println("Erro: " + e.getMessage());
-			
 		}
 	}
 	
 	
-	// Update Genero
-	public boolean update(Genero genero) {
+	// Update
+	public boolean update(Categoria categoria) {
 		
 		boolean rowUpdated = false;
 		
 		try {
 			
-			String SQL = "UPDATE " + tabela + " SET nome = ? WHERE id = ? ;" ;			// id � int, n�o colocar aspassimples
+			String SQL = "UPDATE " + tabela + " SET nome = ?, preco = ? WHERE id = ?;" ;			
 			java.sql.PreparedStatement ps = connection.prepareStatement(SQL);
 			
-			ps.setString(1, genero.getNome());
-			ps.setInt(2, genero.getId());
+			ps.setString(1, categoria.getNome());
+			ps.setString(2, categoria.getPreco());
+			ps.setInt(3, categoria.getId());
 			
 			rowUpdated = ps.executeUpdate() > 0;
 			ps.close();
@@ -123,12 +127,13 @@ public class GeneroDao {
 		} catch (Exception e) {
 			System.out.println("Erro: " + e.getMessage());
 		}
+		
 		return rowUpdated;
 	}
 	
 	
-	// Delete Genero
-	public boolean delete(int id) {
+	// Delete
+	public boolean delete(Integer id) {
 		
 		boolean rowDeleted = false;
 		
@@ -139,8 +144,7 @@ public class GeneroDao {
 			
 			ps.setInt(1, id);
 			
-			//ps.executeUpdate()							// Usado para fazer qualquer altera��o. N�o tem nenhum retorno
-			rowDeleted = ps.executeUpdate() > 0;			// Retorno Indica se obteve sucesso								
+			rowDeleted = ps.executeUpdate() > 0;											// Usado para fazer qualquer altera��o. N�o tem nenhum retorno
 			ps.close();
 			
 		} catch (Exception e) {
@@ -149,6 +153,7 @@ public class GeneroDao {
 		
 		return rowDeleted;
 	}
+	
 	
 	
 	// Trata os erros de todas as excess�es das chamadas SQL
@@ -167,7 +172,6 @@ public class GeneroDao {
 			}
 		}
 	}
-
-
-
+	
+	
 }

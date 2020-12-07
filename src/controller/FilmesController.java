@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,22 +16,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import bean.Filme;
-import dao.CategoriaDao;
-import dao.DataSource;
-import dao.FilmeDao;
-import dao.GeneroDao;
+import dao.JdbcCategoriaDao;
+import dao.JdbcFilmeDao;
+import dao.JdbcGeneroDao;
 
 
 @MultipartConfig
 @Controller
 public class FilmesController {
 	
-	private final FilmeDao filmeDao;  
-	private final GeneroDao generoDao;
-	private final CategoriaDao categoriaDao;
+	private JdbcFilmeDao filmeDao;  
+	private JdbcGeneroDao generoDao;
+	private JdbcCategoriaDao categoriaDao;
 	 
 	
-	public FilmesController(FilmeDao filmeDao, GeneroDao generoDao, CategoriaDao categoriaDao) {
+	@Autowired
+	public FilmesController(JdbcFilmeDao filmeDao, JdbcGeneroDao generoDao, JdbcCategoriaDao categoriaDao) {
 		this.filmeDao = filmeDao; 
 		this.generoDao = generoDao;
 		this.categoriaDao = categoriaDao;

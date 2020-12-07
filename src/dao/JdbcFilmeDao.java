@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.sql.DataSource;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,29 +13,30 @@ import org.springframework.stereotype.Repository;
 
 import bean.Filme;
 
-import javax.sql.DataSource;
+
 
 @Repository
-public class FilmeDao {
-	//private DataSource dataSource;
+public class JdbcFilmeDao {
+	
 	private String tabela;
-	private GeneroDao generoDao;
-	private CategoriaDao categoriaDao;
+	private JdbcGeneroDao generoDao;
+	private JdbcCategoriaDao categoriaDao;
 	private Connection connection;
 	
 	
 	
 	@Autowired
-	public FilmeDao(DataSource datasource, GeneroDao generoDao, CategoriaDao categoriaDao){
+	public JdbcFilmeDao(DataSource dataSource, JdbcGeneroDao generoDao, JdbcCategoriaDao categoriaDao){
 		
 		try {
-			this.connection = datasource.getConnection();
+			this.connection = dataSource.getConnection();
 			this.generoDao = generoDao;
 			this.categoriaDao = categoriaDao;
-			this.tabela = "filme";
+			
 		} catch (Exception ex) {
 			System.err.println("Erro ao instanciar FilmeDao " + ex.getMessage());
 		}
+		this.tabela = "filme";
 	}
 	
 	
