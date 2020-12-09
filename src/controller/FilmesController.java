@@ -61,7 +61,7 @@ public class FilmesController {
     @RequestMapping("formularioFilme")
     public String form(/*Filme filme,*/ Model model) {   	
     	
-    	// N�o pode receber um objeto pq impede a visualiza��o da validacao do Insert/Update
+    	// Nao pode receber um objeto pq impede a visualizacao da validacao do Insert/Update
     	model.addAttribute("generos", generoDao.selectAll());
     	model.addAttribute("categorias", categoriaDao.selectAll());
         return "filme/cadastro";
